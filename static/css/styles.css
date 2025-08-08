@@ -1,0 +1,384 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+    height: 400px;
+    overflow: hidden;
+}
+
+.container {
+    position: relative;
+    width: 1280px;
+    height: 400px;
+    margin: 0 auto;
+    background-color: #000000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background-image 0.5s ease-in-out;
+    overflow: hidden;
+    cursor: none;
+}
+
+.container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/static/images/Mask.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+/* Ensure all direct children of container are below the mask */
+.container > * {
+    position: relative;
+    z-index: 1;
+}
+
+.background-fade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+/* Control buttons container */
+/*
+.control-buttons {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+}
+*/
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Mode selector styles */
+.mode-selector {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 110;
+    width: 300px;
+}
+
+/* Input simulator styles */
+.input-simulator {
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.input-simulator h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333;
+}
+
+.input-simulator button {
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.input-simulator button:hover {
+    background-color: #e0a800;
+}
+
+.audio-visualizer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.text-output {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 800px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: none;
+}
+
+.text-output h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.text-output p {
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+.loading {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+}
+
+.loading::after {
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#videoContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    background-color: black;
+    overflow: hidden;
+    z-index: 20;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+
+#generatedVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+    will-change: opacity;
+}
+
+#stopRecordingBtn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+#stopRecordingBtn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* State-based container styles */
+.container.error .status {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Production mode styles */
+.production-mode {
+    display: none !important;
+    visibility: hidden !important;
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.debug-console {
+    width: 100%;
+    max-width: 1280px;
+    margin: 20px auto 0 auto;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'Courier New', monospace;
+    color: #00ff00;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.debug-console.hidden {
+    display: none;
+}
+
+.debug-header {
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.debug-header h3 {
+    color: #00ff00;
+    margin: 0;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.debug-section {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.debug-section h4 {
+    color: #00ff00;
+    margin: 0 0 10px 0;
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.debug-section .status {
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+}
+
+.debug-section #transcription,
+.debug-section #videoPrompt {
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.4;
+}
+
+.debug-section .error {
+    color: #ff4444;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.4;
+}
+
+.input-simulator {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.input-simulator button {
+    background-color: #333;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.input-simulator button:hover {
+    background-color: #00ff00;
+    color: #1e1e1e;
+}
+
+.startup-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    width: 100%;
+    text-align: center;
+}
+
+.startup-logo img {
+    max-width: 100%;
+    height: auto;
+}
+
+.error-div {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 1100;
+    color: red;
+    font-size: 1rem;
+    font-family: 'Courier New', monospace;
+    font-style: italic;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 auto;
+    padding: 0rem 3rem 3rem 3rem;
+    display: none;
+    box-sizing: border-box;
+} 
+/* Screen Sleep Mode Styles */
+body.screen-sleep {
+    background-color: black !important;
+    transition: background-color 300ms ease-out;
+}
+
+body.screen-sleep * {
+    opacity: 0 !important;
+    transition: opacity 300ms ease-out;
+}
+
+/* Ensure smooth wake transition */
+body:not(.screen-sleep) {
+    transition: background-color 300ms ease-in;
+}

@@ -1,0 +1,55 @@
+/* Default clock variables */
+:root {
+    --clock-font-family: 'Ballet', cursive;
+    --clock-font-size: 12rem;
+    --clock-font-weight: normal;
+    --clock-color: #ffffff;
+    --clock-glow-color: rgba(255, 255, 255, 0.5);
+    --clock-spacing: 0.5rem;
+}
+
+.clock-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+    opacity: 0;
+    display: none;
+    margin-top: 1rem;
+}
+
+.clock-digits {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--clock-spacing);
+    font-family: var(--clock-font-family);
+    font-size: var(--clock-font-size);
+    color: var(--clock-color);
+    font-weight: var(--clock-font-weight);
+    text-shadow: 0 0 20px var(--clock-glow-color);
+}
+
+.digit, .colon {
+    line-height: 1;
+    transition: opacity 0.3s ease;
+}
+
+.colon.hidden {
+    opacity: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    :root {
+        --clock-font-size: 8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --clock-font-size: 5rem;
+    }
+}

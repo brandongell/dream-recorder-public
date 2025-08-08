@@ -1,0 +1,47 @@
+sequenceDiagram
+    autonumber
+
+    participant U as User
+    participant TS as Touch Sensor
+    participant GPIO as GPIO Service
+    participant DM as Dream Machine
+    participant OpenAI as OpenAI
+    participant GA as Google AI
+    
+    Note over U,DM: Recording dream
+    U ->> TS: Double tap starts
+    TS ->> GPIO: Detects double tap pattern
+    GPIO ->> DM: Sends start recording request
+    U ->> DM: Voices dream
+    U ->> TS: Single tap stops
+    TS ->> GPIO: Detects single tap pattern
+    GPIO ->> DM: Sends stop recording request
+    
+    Note over DM,GA: Processing dream
+    DM ->> OpenAI: Sends dream voice for STT
+    OpenAI -->> DM: Returns voice text
+    DM ->> OpenAI: Sends voice text for Video Prompt creation
+    OpenAI -->> DM: Returns Video Prompt
+    DM ->> GA: Sends Video Prompt for video creation (VEO 3)
+    DM -->> GA: Polls for operation status
+    DM -->> DM: Waits
+    DM -->> GA: Fetches video from URL
+    DM -->> DM: Applies dream filters
+    DM ->> U: Plays video
+    
+    Note over U,DM: Viewing dream
+    U ->> TS: Single tap plays latest dream
+    TS ->> GPIO: Detects single tap pattern
+    GPIO ->> DM: Sends single tap request
+    DM ->> DM: State manager decides: show latest dream
+    DM ->> U: Plays dream video
+    U ->> TS: Single tap shows previous dream
+    TS ->> GPIO: Detects single tap pattern
+    GPIO ->> DM: Sends single tap pattern
+    DM ->> DM: State manager decides: show previous dream
+    DM ->> U: Plays dream video
+    U ->> TS: Double tap returns to clock
+    TS ->> GPIO: Detects double tap pattern
+    GPIO ->> DM: Sends double tap pattern
+    DM ->> DM: State manager decides: show clock view
+    DM ->> U: Shows clock view

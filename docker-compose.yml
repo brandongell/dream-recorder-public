@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - .:/app
+      - db-data:/app/db
+      - media-data:/app/media
+      - logs-data:/app/logs
+    env_file:
+      - .env
+    environment:
+      - HOST=0.0.0.0
+    command: python dream_recorder.py
+
+volumes:
+  db-data:
+  media-data:
+  logs-data:

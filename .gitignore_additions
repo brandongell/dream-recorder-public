@@ -1,0 +1,37 @@
+# Backup files
+*.backup
+*.backup2
+*.backup3
+*.backup4
+*.backup_*
+*.bak
+
+# Test files
+test_*.py
+test_*.sh
+test_*.html
+test_*.wav
+
+# Debug and log files
+*_debug.py
+*_test.py
+gpio_*.log
+*.patch
+debug_*.sh
+
+# Config backups
+config.json.backup*
+
+# Temporary scripts
+add_*.py
+update_*.py
+setup_*.py
+monitor_*.sh
+start_*.sh
+
+# GPIO service variants
+gpio_service_*.py
+gpio_simplified.py
+gpio_diagnostic*.py
+playback_fix.py
+simple_tap_test.py
